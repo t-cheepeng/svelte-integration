@@ -1,0 +1,1 @@
+<progress class="progress w-full progress-primary"></progress>

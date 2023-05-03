@@ -11,7 +11,8 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test:unit": "vitest",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write ."
+		"format": "prettier --plugin-search-dir . --write .",
+    "generate-types": "npx swagger-typescript-api -p http://localhost:8080/v3/api-docs -o ./src/lib/types/api --modular --responses --extract-enums --no-client --route-types --clean-output"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
@@ -36,6 +37,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"daisyui": "^2.51.6"
+		"daisyui": "^2.51.6",
+		"svelte-icons": "^2.1.0"
 	}
 }

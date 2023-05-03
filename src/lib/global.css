@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.icon-sm {
+	width: 24px;
+	height: 24px;
+}
+
+.icon-md {
+	width: 48px;
+	height: 48px;
+}
+
+.icon-lg {
+	width: 72px;
+	height: 72px;
+}
+
+.icon-xl {
+	width: 90px;
+	height: 90px;
+}
+
+progress {
+  bottom: 0.5rem;
+}
