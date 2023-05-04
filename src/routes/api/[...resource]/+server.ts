@@ -1,4 +1,4 @@
-import { ApiResponseStatus, type CreateAccountRequest } from "$lib/types/api/data-contracts";
+import { ApiResponseStatus, type CreateAccountRequest, type PatchAccountRequest } from "$lib/types/api/data-contracts";
 import { AccountClient } from "$lib/utils/clients";
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
@@ -58,6 +58,25 @@ export const POST = (async ({params, request}) => {
   }
 
   return serverError();
+}) satisfies RequestHandler;
+
+export const PATCH = (async ({ params, request }) => {
+	const [apiType, ...remainingParams] = params.resource.split('/');
+
+	if (apiType === 'account') {
+		const accClient = new AccountClient();
+		let response;
+
+		if (remainingParams[0] === 'update') {
+			const jsonBody = (await request.json()) as PatchAccountRequest;
+			response = await accClient.patchAccount(jsonBody);
+			return json(response);
+		} else {
+			return serverError();
+		}
+	}
+
+	return serverError();
 }) satisfies RequestHandler;
 
 const serverError = () => {

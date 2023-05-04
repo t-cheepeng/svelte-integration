@@ -53,6 +53,11 @@ export class AccountClient extends Client {
     const response = await this.dispatchRequest(HttpMethod.DELETE);
     return response;
   }
+
+  async patchAccount(patchAccount: Api.PatchAccount.RequestBody) {
+    this.baseUrl += "/update"
+    return await this.dispatchRequest(HttpMethod.PATCH, JSON.stringify(patchAccount));
+  }
 }
 
 export class StockClient extends Client {

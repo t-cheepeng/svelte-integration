@@ -5,22 +5,23 @@ import { CURRENCIES } from '$lib/utils/constants';
 import { ApiType, Fetcher, HttpMethod, type FetchResponse } from '$lib/utils/fetcher';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions } from '../$types';
+import { FormFields } from './form';
 
-export function load({params}) {
-  if (!["create", "edit"].includes(params.action)) {
-    throw error(404);
-  }
-  return params;
+export function load({ params }) {
+	if (!['create', 'edit'].includes(params.action)) {
+		throw error(404);
+	}
+	return params;
 }
 
 export const actions = {
-	default: async (event) => {
+	create: async (event) => {
 		const formData = await event.request.formData();
 
-		const accType = formData.get('accountType');
-    const currency = formData.get('denomination');
-    const accName =  formData.get('accountName');
-    const balance = formData.get('balance');
+		const accType = formData.get(FormFields.ACCOUNT_TYPE);
+		const currency = formData.get(FormFields.DENOMINATION);
+		const accName = formData.get(FormFields.ACCOUNT_NAME);
+		const balance = formData.get(FormFields.BALANCE);
 
 		if (accType === undefined || accType === null || accType.length <= 0) {
 			return fail(400, {
@@ -34,38 +35,38 @@ export const actions = {
 			});
 		}
 
-    if (currency === undefined || currency === null) {
-      return fail(400, {
+		if (currency === undefined || currency === null) {
+			return fail(400, {
 				errorMsg: 'Currency cannot be empty'
 			});
-    }
+		}
 
-    if (!CURRENCIES.includes(currency.toString())) {
-      return fail(400, {
+		if (!CURRENCIES.includes(currency.toString())) {
+			return fail(400, {
 				errorMsg: 'Currency is unknown'
 			});
-    }
+		}
 
-    if (accName === undefined || accName === null) {
-      return fail(400, {
+		if (accName === undefined || accName === null || accName.length <= 0) {
+			return fail(400, {
 				errorMsg: 'Account name cannot be empty'
 			});
-    }
+		}
 
-    if (balance !== undefined && balance !== null) {
-      // Only digits allowed in string
-      if (!/^\d+$/.test(balance.toString())) {
+		if (balance !== undefined && balance !== null) {
+			// Only digits allowed in string
+			if (!/^\d+$/.test(balance.toString())) {
 				return fail(400, {
 					errorMsg: 'Balance must be a postive integer'
 				});
-			};
-    }
-    const cashInCents = balance?.toString() ?? '0';
+			}
+		}
+		const cashInCents = balance?.toString() ?? '0';
 
 		const createAccountRequest: Api.CreateAccount.RequestBody = {
 			accountType: accType.toString() as CreateAccountRequestAccountType,
 			currency: currency.toString(),
-			description: formData.get('description')?.toString(),
+			description: formData.get(FormFields.DESCRIPTION)?.toString(),
 			name: accName.toString(),
 			cashInCents: Number.parseInt(cashInCents)
 		};
@@ -76,6 +77,42 @@ export const actions = {
 			'create',
 			{},
 			JSON.stringify(createAccountRequest)
+		)) as FetchResponse<EmtpyKnownApiResponse>;
+		return await response.json();
+	},
+
+	edit: async (event) => {
+		const formData = await event.request.formData();
+
+		const accName = formData.get(FormFields.ACCOUNT_NAME);
+		const desc = formData.get(FormFields.DESCRIPTION);
+    const id = formData.get(FormFields.ID);
+
+		if (accName === null || accName === undefined || accName.length <= 0) {
+			return fail(400, {
+				errorMsg: 'Account name cannot be empty'
+			});
+		}
+
+    if (id === null || id === undefined || id.length <= 0) {
+      return fail(400, {
+				errorMsg: 'Seems like there is something wrong. Please try again'
+			});
+    }
+
+		const patchAccountRequest: Api.PatchAccount.RequestBody = {
+			id: Number.parseInt(id.toString()),
+			name: accName.toString(),
+			description: desc?.toString()
+		};
+
+		const fetcher = new Fetcher(event);
+		const response = (await fetcher.fetchFor(
+			ApiType.Account,
+			HttpMethod.PATCH,
+			'update',
+			{},
+			JSON.stringify(patchAccountRequest)
 		)) as FetchResponse<EmtpyKnownApiResponse>;
 		return await response.json();
 	}
