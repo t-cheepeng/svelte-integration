@@ -108,6 +108,27 @@ export interface StockResponse {
 	displayTickerSymbol?: string;
 }
 
+export interface TradeResponse {
+	/** @format date-time */
+	tradeTs?: string;
+	tradeType?: TradeResponseTradeType;
+	/** @format int32 */
+	numOfUnits?: number;
+	/** @format int32 */
+	pricePerUnit?: number;
+	name?: string;
+	/** @format int32 */
+	account?: number;
+	/** @format int32 */
+	fee?: number;
+	/** @format int32 */
+	buyId?: number;
+}
+
+export interface TradesResponse {
+	trades?: TradeResponse[];
+}
+
 export interface ExternalSearchResponse {
 	stockName?: string;
 	currencyGuess?: {
@@ -188,6 +209,12 @@ export enum StockResponseAssetClass {
 	EQUITY = 'EQUITY',
 	BOND = 'BOND',
 	CRYPTOCURRENCY = 'CRYPTOCURRENCY'
+}
+
+export enum TradeResponseTradeType {
+	BUY = 'BUY',
+	SELL = 'SELL',
+	DIVIDEND = 'DIVIDEND'
 }
 
 export enum ExternalSearchResponseApiUsed {

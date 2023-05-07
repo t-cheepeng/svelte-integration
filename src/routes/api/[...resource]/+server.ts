@@ -28,6 +28,8 @@ const handleGetStockEndpoints = async (remainingParams: string[]) => {
 
   if (remainingParams[0] === "search") {
     response = await stockClient.searchStock(remainingParams[1]);  
+  } else if (remainingParams[0] === "trade" && remainingParams[1] === undefined) {
+    response = await stockClient.getAllTrades();
   } else {
     response = await stockClient.getAllStocks();
   }

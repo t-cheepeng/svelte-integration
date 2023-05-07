@@ -22,6 +22,7 @@ import {
 	SearchResponseData,
 	StockResponse,
 	StocksResponse,
+	TradesResponse,
 	TradeStockRequest
 } from './data-contracts';
 
@@ -208,6 +209,25 @@ export namespace Api {
 		export type RequestBody = never;
 		export type RequestHeaders = {};
 		export type ResponseBody = AccountResponse;
+	}
+
+	/**
+	 * No description
+	 * @tags stock-controller
+	 * @name GetAllTrades
+	 * @summary Get all trades
+	 * @request GET:/api/stock/trade/
+	 * @response `200` `TradesResponse` Returns all trades in database or an empty list of nothing is in database.
+	 * @response `400` `ApiResponse` Bad request
+	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
+	 * @response `500` `ApiResponse` Internal server error
+	 */
+	export namespace GetAllTrades {
+		export type RequestParams = {};
+		export type RequestQuery = {};
+		export type RequestBody = never;
+		export type RequestHeaders = {};
+		export type ResponseBody = TradesResponse;
 	}
 
 	/**

@@ -1,10 +1,11 @@
 <script lang="ts">
-	import FaRegQuestionCircle from 'svelte-icons/fa/FaRegQuestionCircle.svelte';
-	import MdAddCircleOutline from 'svelte-icons/md/MdAddCircleOutline.svelte';
-	import MdAttachMoney from 'svelte-icons/md/MdAttachMoney.svelte';
-	import MdRemoveCircleOutline from 'svelte-icons/md/MdRemoveCircleOutline.svelte';
+  import type { TradeStockRequestTradeType } from '$lib/types/api/data-contracts';
+  import FaRegQuestionCircle from 'svelte-icons/fa/FaRegQuestionCircle.svelte';
+  import MdAddCircleOutline from 'svelte-icons/md/MdAddCircleOutline.svelte';
+  import MdAttachMoney from 'svelte-icons/md/MdAttachMoney.svelte';
+  import MdRemoveCircleOutline from 'svelte-icons/md/MdRemoveCircleOutline.svelte';
 
-	export let type: 'BUY' | 'SELL' | 'DIVIDEND';
+	export let type: TradeStockRequestTradeType;
 </script>
 
 <div class="card w-full bg-neutral mb-6">

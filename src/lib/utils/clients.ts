@@ -5,7 +5,8 @@ import type {
   AccountsResponse,
   ApiResponse,
   SearchResponseData,
-  StocksResponse
+  StocksResponse,
+  TradesResponse
 } from '$lib/types/api/data-contracts';
 import { HttpMethod } from './fetcher';
 
@@ -105,6 +106,11 @@ export class StockClient extends Client {
 			HttpMethod.PATCH,
 			JSON.stringify(patchStock)
 		)) as KnownApiResponse<EmtpyKnownApiResponse>;
+	}
+
+	async getAllTrades() {
+		this.baseUrl += '/trade/';
+		return (await this.dispatchRequest(HttpMethod.GET)) as KnownApiResponse<TradesResponse>;
 	}
 }
 
