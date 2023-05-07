@@ -133,6 +133,10 @@ export interface SearchResponseData {
 	searchResponses?: ExternalSearchResponse[];
 }
 
+export interface StocksResponse {
+	stocks?: StockResponse[];
+}
+
 export interface AccountResponse {
 	/** @format int32 */
 	id: number;

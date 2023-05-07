@@ -18,11 +18,11 @@
 		<span class="icon-sm"><MdAccountBalance /></span>
 		<span class="btm-nav-label">Accounts</span>
 	</a>
-	<a class="bg-neutral" href="stocks" class:active={curPath.startsWith('/stocks')}>
+	<a class="bg-neutral" href="/stocks" class:active={curPath.startsWith('/stocks')}>
 		<span class="icon-sm"><IoIosCash /></span>
 		<span class="btm-nav-label">Stocks</span>
 	</a>
-	<a class="bg-neutral" href="trades" class:active={curPath.startsWith('/trades')}>
+	<a class="bg-neutral" href="/trades" class:active={curPath.startsWith('/trades')}>
 		<span class="icon-sm"><FaCoins /></span>
 		<span class="btm-nav-label">Trades</span>
 	</a>

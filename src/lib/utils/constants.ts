@@ -1,3 +1,5 @@
+export const ASSET_CLASSES: string[] = ['ETF', 'EQUITY', 'BOND', 'CRYPTOCURRENCY'];
+
 export const CURRENCIES: string[] = [
 	'AED',
 	'AFN',

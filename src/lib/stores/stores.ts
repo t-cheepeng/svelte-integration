@@ -1,3 +1,5 @@
+import type { ApiError } from '$lib/types/api/data-contracts';
+import type { Account, SearchResult, Stock } from '$lib/types/model';
 import { writable } from 'svelte/store';
 
 export enum NotificationType {
@@ -24,6 +26,10 @@ export function removeToast() {
 	});
 }
 
+export function addToastFromApiErrors(errors: ApiError[] | undefined) {
+  errors?.forEach((error) => addToast(error.message, NotificationType.ERROR));
+}
+
 export const accountToEdit = writable<Account | undefined>();
 export function editAccount(account: Account) {
   accountToEdit.set(account);
@@ -31,4 +37,18 @@ export function editAccount(account: Account) {
 
 export function removeEditAccount() {
   accountToEdit.set(undefined);
+}
+
+export const stockSearchResult = writable<SearchResult | undefined>();
+export function addStockSearchResult(searchResult: SearchResult) {
+  stockSearchResult.set(searchResult);
+}
+
+export function removeStockSearchResult() {
+  stockSearchResult.set(undefined);
+}
+
+export const stock = writable<Stock>();
+export function addStock(stockToAdd: Stock) {
+  stock.set(stockToAdd);
 }

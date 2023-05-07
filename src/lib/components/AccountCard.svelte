@@ -1,4 +1,6 @@
 <script lang="ts">
+	import TextBadge from './TextBadge.svelte';
+
 	export let account: Account;
 </script>
 
@@ -14,7 +16,7 @@
 			</div>
 		</div>
 		<div class="grid justify-items-end content-start">
-			<span class="badge badge-secondary">{account.currency}</span>
+			<TextBadge text={account.currency} />
 			<h1 class="card-title pt-3">Groups</h1>
 			{#each account.groups as group}
 				<p>{group}</p>

@@ -9,6 +9,7 @@
   export let positiveOnly = true;
   export let value: string | undefined = undefined;
   export let disabled = false;
+  export let readonly = false;
 </script>
 
 <div class="form-control mb-8">
@@ -28,6 +29,7 @@
       min={positiveOnly ? 0 : ''}
       {value}
       {disabled}
+      {readonly}
 		/>
 	</label>
 </div>
