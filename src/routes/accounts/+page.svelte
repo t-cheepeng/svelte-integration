@@ -6,10 +6,10 @@
 	import Fab from '$lib/components/Fab.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import ProgressIndicator from '$lib/components/ProgressIndicator.svelte';
-	import TransactionCard from '$lib/components/TransactionCard.svelte';
 	import { NotificationType, addToast, editAccount } from '$lib/stores/stores';
 	import type { EmtpyKnownApiResponse } from '$lib/types/api';
 	import { ApiResponseStatus, type AccountsResponse } from '$lib/types/api/data-contracts';
+	import type { Account } from '$lib/types/model';
 	import { ApiType, Fetcher, HttpMethod, type FetchResponse } from '$lib/utils/fetcher';
 	import { sleep } from '$lib/utils/utils';
 	import FaObjectUngroup from 'svelte-icons/fa/FaObjectUngroup.svelte';
@@ -150,12 +150,10 @@
 			</button>
 		</div>
 
-		<h1 class="text-5xl flex pl-8">Latest Transactions</h1>
+		<h1 class="text-5xl flex pl-8">Latest Trades</h1>
 
 		<div class="mt-10 px-8">
-			<TransactionCard type="BUY" />
-			<TransactionCard type="SELL" />
-			<TransactionCard type="DIVIDEND" />
+      
 		</div>
 	{/if}
 {/await}

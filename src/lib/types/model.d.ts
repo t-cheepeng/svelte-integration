@@ -1,4 +1,4 @@
-import type { StockResponseAssetClass } from "./api/data-contracts";
+import type { StockResponseAssetClass, TradeResponseTradeType } from "./api/data-contracts";
 
 export interface Account {
   id: number;
@@ -25,4 +25,13 @@ export interface SearchResult {
 	exchangeCountry: string;
 	searchScore: number;
 	apiUsed: ExternalSearchResponseApiUsed;
+}
+
+export interface Trade {
+  tradeType: TradeResponseTradeType;
+  tradeTs: string;
+  fee: number;
+  stockName: string;
+  numOfUnits: number;
+  pricePerUnit: number;
 }
