@@ -4,6 +4,7 @@
 	import IoIosCash from 'svelte-icons/io/IoIosCash.svelte';
 	import MdAccountBalance from 'svelte-icons/md/MdAccountBalance.svelte';
 	import MdDashboard from 'svelte-icons/md/MdDashboard.svelte';
+	import FaRegObjectGroup from 'svelte-icons/fa/FaObjectGroup.svelte'
 
 	let curPath: string = '/';
 	$: curPath = $page.url.pathname;
@@ -17,6 +18,10 @@
 	<a class="bg-neutral" href="/accounts" class:active={curPath.startsWith('/accounts')}>
 		<span class="icon-sm"><MdAccountBalance /></span>
 		<span class="btm-nav-label">Accounts</span>
+	</a>
+	<a class="bg-neutral" href="/groups" class:active={curPath.startsWith('/groups')}>
+		<span class="icon-sm"><FaRegObjectGroup /></span>
+		<span class="btm-nav-label">Groups</span>
 	</a>
 	<a class="bg-neutral" href="/stocks" class:active={curPath.startsWith('/stocks')}>
 		<span class="icon-sm"><IoIosCash /></span>
