@@ -60,7 +60,7 @@
 		} else if (response.status === ApiResponseStatus.FAIL && response.errors !== undefined) {
 			response.errors.forEach((error) => addToast(error.message, NotificationType.ERROR));
 		} else {
-			addToast('Unexpected server error', NotificationType.ERROR);
+			addToast('Internal server error', NotificationType.ERROR);
 		}
 	});
 

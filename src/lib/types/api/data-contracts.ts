@@ -158,6 +158,16 @@ export interface StocksResponse {
 	stocks?: StockResponse[];
 }
 
+export interface GroupMappingResponse {
+	name?: string;
+	currency?: string;
+	accountIdUnderGroup?: number[];
+}
+
+export interface GroupMappingsResponse {
+	groupMappings?: GroupMappingResponse[];
+}
+
 export interface AccountResponse {
 	/** @format int32 */
 	id: number;

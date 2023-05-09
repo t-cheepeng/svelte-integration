@@ -1,33 +1,58 @@
 <script lang="ts">
 	import Fab from '$lib/components/Fab.svelte';
 	import ProgressIndicator from '$lib/components/ProgressIndicator.svelte';
+	import { NotificationType, addToast, addToastFromApiErrors } from '$lib/stores/stores.js';
+	import { ApiResponseStatus } from '$lib/types/api/data-contracts.js';
+	import type { Group } from '$lib/types/model.js';
 	import MdGroupWork from 'svelte-icons/md/MdGroupWork.svelte';
+	import GroupCard from './GroupCard.svelte';
 
-  
+	export let data;
+	export let groups: Group[];
+
+	data.streamed.data.then((response) => {
+		if (response.status === ApiResponseStatus.SUCCESS && response.data !== undefined) {
+			groups =
+				response.data.groupMappings?.map((groupMapping) => {
+					console.log(groupMapping);
+					return {
+						name: groupMapping.name ?? '',
+						currency: groupMapping.currency ?? '',
+						accountsInGroup: groupMapping.accountIdUnderGroup ?? []
+					};
+				}) ?? [];
+		} else if (response.status === ApiResponseStatus.FAIL && response.errors !== undefined) {
+			addToastFromApiErrors(response.errors);
+		} else {
+			addToast('Internal server error', NotificationType.ERROR);
+		}
+	});
+
+	$: console.log(groups);
 </script>
 
 {#await data.streamed.data}
 	<ProgressIndicator />
 {:then}
-	{#if [].length <= 0}
+	{#if groups.length <= 0}
 		<div class="flex flex-col justify-center items-center p-8 h-screen">
 			<span class="icon-xl mb-6"><MdGroupWork /></span>
-			<h1 class="text-6xl font-bold mb-4">No trades?</h1>
+			<h1 class="text-6xl font-bold mb-4">No groups?</h1>
 			<p class="text-xl">Add one with the "+" button now</p>
 		</div>
 	{:else}
 		<div class="p-8">
 			<div class="mb-8">
-				<h1 class="font-extrabold text-4xl mb-2">Trades</h1>
-				<p class="text-lg">
-					View all your trades here. The amount in the trade is exclusive of any fees
-				</p>
+				<h1 class="font-extrabold text-4xl mb-2">Groups</h1>
+				<p class="text-lg">View all groups here. Select one to view each group in more detail</p>
 			</div>
 
-			{#each [] as a}
-				<div />
-			{/each}
+			<div class="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl: grid-cols-4 gap-4">
+				{#each groups as group}
+					<GroupCard {group} />
+				{/each}
+			</div>
 		</div>
 	{/if}
-	<Fab href="/trades/trade" />
+	<Fab href="/groups/group" />
 {/await}

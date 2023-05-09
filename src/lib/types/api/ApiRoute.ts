@@ -17,6 +17,7 @@ import {
 	CreateAccountGroupRequest,
 	CreateAccountRequest,
 	CreateStockRequest,
+	GroupMappingsResponse,
 	PatchAccountRequest,
 	PatchStockRequest,
 	SearchResponseData,
@@ -268,6 +269,25 @@ export namespace Api {
 		export type RequestBody = never;
 		export type RequestHeaders = {};
 		export type ResponseBody = StocksResponse;
+	}
+
+	/**
+	 * No description
+	 * @tags account-group-controller
+	 * @name GetAllGroupsAndMapping
+	 * @summary Get all groups and account to group mappings
+	 * @request GET:/api/group/map/all
+	 * @response `200` `GroupMappingsResponse` All groups and account to group mappings retrieved. Will return empty lists as well
+	 * @response `400` `ApiResponse` Bad request
+	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
+	 * @response `500` `ApiResponse` Internal server error
+	 */
+	export namespace GetAllGroupsAndMapping {
+		export type RequestParams = {};
+		export type RequestQuery = {};
+		export type RequestBody = never;
+		export type RequestHeaders = {};
+		export type ResponseBody = GroupMappingsResponse;
 	}
 
 	/**

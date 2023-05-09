@@ -5,7 +5,7 @@ import {
   type PatchAccountRequest,
   type PatchStockRequest
 } from '$lib/types/api/data-contracts';
-import { AccountClient, StockClient } from '$lib/utils/clients';
+import { AccountClient, GroupClient, StockClient } from '$lib/utils/clients';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
@@ -36,12 +36,20 @@ const handleGetStockEndpoints = async (remainingParams: string[]) => {
   return json(response);
 }
 
+const handleGetGroupEndpoints = async (remainingParams: string[]) => {
+  const groupClient = new GroupClient();
+  const response = await groupClient.getAllGroupMappings();
+  return json(response);
+}
+
 export const GET = (async ({ params }) => {
 	const [apiType, ...remainingParams] = params.resource.split('/');
 	if (apiType === 'account') {
 		return handleGetAccountEndpoints(remainingParams);
 	} else if (apiType === "stock") {
     return handleGetStockEndpoints(remainingParams);
+  } else if (apiType === "group") {
+    return handleGetGroupEndpoints(remainingParams);
   } else {
 		return serverError();
 	}

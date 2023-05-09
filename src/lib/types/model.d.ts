@@ -35,3 +35,9 @@ export interface Trade {
   numOfUnits: number;
   pricePerUnit: number;
 }
+
+export interface Group {
+  name: string;
+  currency: string;
+  accountsInGroup: number[];
+}

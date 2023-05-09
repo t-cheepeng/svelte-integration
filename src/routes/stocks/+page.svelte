@@ -36,7 +36,7 @@
 		} else if (response.status === ApiResponseStatus.FAIL && response.errors !== undefined) {
 			addToastFromApiErrors(response.errors);
 		} else {
-			addToast('Unexpected server error', NotificationType.ERROR);
+			addToast('Internal server error', NotificationType.ERROR);
 		}
 	});
 

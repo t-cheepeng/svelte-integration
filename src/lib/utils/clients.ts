@@ -4,6 +4,7 @@ import type {
   AccountResponse,
   AccountsResponse,
   ApiResponse,
+  GroupMappingsResponse,
   SearchResponseData,
   StocksResponse,
   TradesResponse
@@ -119,4 +120,9 @@ export class GroupClient extends Client {
 		super();
 		this.baseUrl += '/group';
 	}
+
+  async getAllGroupMappings() {
+    this.baseUrl += "/map/all";
+    return (await this.dispatchRequest(HttpMethod.GET)) as KnownApiResponse<GroupMappingsResponse>;
+  }
 }
