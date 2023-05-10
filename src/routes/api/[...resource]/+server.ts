@@ -12,7 +12,7 @@ import type { RequestHandler } from './$types';
 const handleGetAccountEndpoints = async (remainingParams: string[]) => {
 	const accClient = new AccountClient();
 	let response;
-
+  
 	if (remainingParams[0] !== undefined) {
 		response = await accClient.getAccount({ accountId: Number.parseInt(remainingParams[0]) });
 	} else {

@@ -41,3 +41,9 @@ export interface Group {
   currency: string;
   accountsInGroup: number[];
 }
+
+export interface GroupAccount {
+	name: string;
+	currency: string;
+	accountsInGroup: Account[];
+}

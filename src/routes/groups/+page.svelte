@@ -3,24 +3,16 @@
 	import ProgressIndicator from '$lib/components/ProgressIndicator.svelte';
 	import { NotificationType, addToast, addToastFromApiErrors } from '$lib/stores/stores.js';
 	import { ApiResponseStatus } from '$lib/types/api/data-contracts.js';
-	import type { Group } from '$lib/types/model.js';
+	import type { GroupAccount } from '$lib/types/model.js';
 	import MdGroupWork from 'svelte-icons/md/MdGroupWork.svelte';
 	import GroupCard from './GroupCard.svelte';
 
 	export let data;
-	export let groups: Group[];
+	export let groups: GroupAccount[];
 
 	data.streamed.data.then((response) => {
 		if (response.status === ApiResponseStatus.SUCCESS && response.data !== undefined) {
-			groups =
-				response.data.groupMappings?.map((groupMapping) => {
-					console.log(groupMapping);
-					return {
-						name: groupMapping.name ?? '',
-						currency: groupMapping.currency ?? '',
-						accountsInGroup: groupMapping.accountIdUnderGroup ?? []
-					};
-				}) ?? [];
+			groups = response.data
 		} else if (response.status === ApiResponseStatus.FAIL && response.errors !== undefined) {
 			addToastFromApiErrors(response.errors);
 		} else {
