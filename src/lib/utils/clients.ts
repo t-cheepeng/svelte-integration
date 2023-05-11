@@ -121,8 +121,16 @@ export class GroupClient extends Client {
 		this.baseUrl += '/group';
 	}
 
-  async getAllGroupMappings() {
-    this.baseUrl += "/map/all";
-    return (await this.dispatchRequest(HttpMethod.GET)) as KnownApiResponse<GroupMappingsResponse>;
-  }
+	async getAllGroupMappings() {
+		this.baseUrl += '/map/all';
+		return (await this.dispatchRequest(HttpMethod.GET)) as KnownApiResponse<GroupMappingsResponse>;
+	}
+
+	async createGroup(createGroup: Api.CreateAccountGroup.RequestBody) {
+		this.baseUrl += '/create';
+		return (await this.dispatchRequest(
+			HttpMethod.POST,
+			JSON.stringify(createGroup)
+		)) as KnownApiResponse<EmtpyKnownApiResponse>;
+	}
 }

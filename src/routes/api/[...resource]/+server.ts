@@ -1,5 +1,6 @@
 import {
   ApiResponseStatus,
+  type CreateAccountGroupRequest,
   type CreateAccountRequest,
   type CreateStockRequest,
   type PatchAccountRequest,
@@ -91,6 +92,11 @@ export const POST = (async ({ params, request }) => {
 	} else if (apiType === 'stock') {
     const stockClient = new StockClient();
     const response = await stockClient.createStock((await request.json()) as CreateStockRequest);
+
+    return json(response);
+  } else if (apiType === 'group') {
+    const groupClient = new GroupClient();
+    const response = await groupClient.createGroup((await request.json()) as CreateAccountGroupRequest);
 
     return json(response);
   }
