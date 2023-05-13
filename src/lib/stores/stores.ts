@@ -52,3 +52,12 @@ export const stock = writable<Stock>();
 export function addStock(stockToAdd: Stock) {
   stock.set(stockToAdd);
 }
+
+export const transactAccount = writable<Account | undefined>();
+export function transact(account: Account) {
+  transactAccount.set(account);
+}
+
+export function removeTransactAccount() {
+  transactAccount.set(undefined);
+}

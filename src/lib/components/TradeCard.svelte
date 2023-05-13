@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { TradeResponseTradeType } from '$lib/types/api/data-contracts';
 	import type { Trade } from '$lib/types/model';
-	import { convertFullTimestampToReadableDateTime } from '$lib/utils/utils';
+	import { convertCentsToDollarAndCents, convertFullTimestampToReadableDateTime } from '$lib/utils/utils';
 	import FaRegQuestionCircle from 'svelte-icons/fa/FaRegQuestionCircle.svelte';
 	import MdAddCircleOutline from 'svelte-icons/md/MdAddCircleOutline.svelte';
 	import MdAttachMoney from 'svelte-icons/md/MdAttachMoney.svelte';
@@ -34,11 +34,11 @@
 		<div class="col-span-9 flex-row justify-evenly">
 			<p class="text-xl font-extrabold">{trade.stockName}</p>
       <p>Traded at: {convertFullTimestampToReadableDateTime(trade.tradeTs)}</p>
-			<p>Fee: {trade.fee}</p>
+			<p>Fee: {convertCentsToDollarAndCents(trade.fee)}</p>
 		</div>
 		<div class="col-span-2 items-center flex">
 			<p class="text-2xl font-medium">
-				{`${trade.tradeType === TradeResponseTradeType.SELL ? '+' : '-'}${trade.numOfUnits * trade.pricePerUnit}`}
+				{`${trade.tradeType === TradeResponseTradeType.SELL ? '+' : '-'}${convertCentsToDollarAndCents(trade.numOfUnits * trade.pricePerUnit)}`}
 			</p>
 		</div>
 	</div>

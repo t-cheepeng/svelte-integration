@@ -6,15 +6,23 @@
 	import Fab from '$lib/components/Fab.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import ProgressIndicator from '$lib/components/ProgressIndicator.svelte';
-	import { NotificationType, addToast, editAccount } from '$lib/stores/stores';
+	import {
+	  NotificationType,
+	  addToast,
+	  editAccount,
+	  transact
+	} from '$lib/stores/stores';
 	import type { EmtpyKnownApiResponse } from '$lib/types/api';
 	import { ApiResponseStatus, type AccountsResponse } from '$lib/types/api/data-contracts';
 	import type { Account } from '$lib/types/model';
 	import { ApiType, Fetcher, HttpMethod, type FetchResponse } from '$lib/utils/fetcher';
 	import { sleep } from '$lib/utils/utils';
+	import FaExchangeAlt from 'svelte-icons/fa/FaExchangeAlt.svelte';
 	import FaObjectUngroup from 'svelte-icons/fa/FaObjectUngroup.svelte';
 	import FaOdnoklassniki from 'svelte-icons/fa/FaOdnoklassniki.svelte';
 	import FaRegObjectUngroup from 'svelte-icons/fa/FaRegObjectUngroup.svelte';
+	import GiPayMoney from 'svelte-icons/gi/GiPayMoney.svelte';
+	import GiReceiveMoney from 'svelte-icons/gi/GiReceiveMoney.svelte';
 	import MdDeleteForever from 'svelte-icons/md/MdDeleteForever.svelte';
 	import MdEdit from 'svelte-icons/md/MdEdit.svelte';
 	import type { PageData } from './$types';
@@ -48,7 +56,7 @@
 					id: account.id,
 					accountName: account.name,
 					costBasis: 0,
-					currentValue: 0,
+					currentValue: account.cashInCents ?? 0,
 					currency: account.currency,
 					groups: []
 				};
@@ -92,13 +100,24 @@
 		isOpen = false;
 	}
 
-  function edit() {
-    const selectedIdx = selectedAccount.findIndex(isSelected => isSelected);
-    editAccount(accounts[selectedIdx]);
-    if (browser) {
-      goto("/accounts/account/edit");
-    }
-  }
+	function edit() {
+		const selectedIdx = selectedAccount.findIndex((isSelected) => isSelected);
+		editAccount(accounts[selectedIdx]);
+		if (browser) {
+			goto('/accounts/account/edit');
+		}
+	}
+
+	function navToTransact(type: string) {
+		const nav = () => {
+			const idx = selectedAccount.findIndex((isSelected) => isSelected);
+			transact(accounts[idx]);
+			if (browser) {
+				goto('/accounts/transact/' + type);
+			}
+		};
+		return nav;
+	}
 </script>
 
 {#if isDeleteLoading}
@@ -132,6 +151,18 @@
 		</div>
 
 		<div class="flex justify-evenly p-10 mb-8">
+			<button class="btn btn-circle btn-outline icon-lg" on:click={navToTransact('deposit')}>
+				<span class="icon-lg mb-2"><GiPayMoney /></span>
+				<p class="text-md">Deposit</p>
+			</button>
+			<button class="btn btn-circle btn-outline icon-lg" on:click={navToTransact('withdraw')}>
+				<span class="icon-lg mb-2"><GiReceiveMoney /></span>
+				<p class="text-md">Withdraw</p>
+			</button>
+			<button class="btn btn-circle btn-outline icon-lg" on:click={navToTransact('transfer')}>
+				<span class="icon-lg mb-2"><FaExchangeAlt /></span>
+				<p class="text-md">Transfer</p>
+			</button>
 			<button class="btn btn-circle btn-outline icon-lg">
 				<span class="icon-lg mb-2"><FaObjectUngroup /></span>
 				<p class="text-md">Group</p>
@@ -152,9 +183,7 @@
 
 		<h1 class="text-5xl flex pl-8">Latest Trades</h1>
 
-		<div class="mt-10 px-8">
-      
-		</div>
+		<div class="mt-10 px-8" />
 	{/if}
 {/await}
 

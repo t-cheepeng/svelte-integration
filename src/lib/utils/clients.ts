@@ -69,6 +69,11 @@ export class AccountClient extends Client {
 		this.baseUrl += '/update';
 		return await this.dispatchRequest(HttpMethod.PATCH, JSON.stringify(patchAccount));
 	}
+
+  async transactAccount(transactionRequest: Api.TransactAccount.RequestBody) {
+    this.baseUrl += "/transact";
+    return await this.dispatchRequest(HttpMethod.POST, JSON.stringify(transactionRequest));
+  }
 }
 
 export class StockClient extends Client {

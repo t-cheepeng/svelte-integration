@@ -12,6 +12,7 @@
 import {
 	AccountResponse,
 	AccountsResponse,
+	AccountTransactionRequest,
 	ApiResponse,
 	CreateAccountAccountGroupRequest,
 	CreateAccountGroupRequest,
@@ -100,6 +101,24 @@ export namespace Api {
 		export type RequestParams = {};
 		export type RequestQuery = {};
 		export type RequestBody = CreateAccountGroupRequest;
+		export type RequestHeaders = {};
+		export type ResponseBody = ApiResponse;
+	}
+
+	/**
+	 * No description
+	 * @tags account-controller
+	 * @name TransactAccount
+	 * @request POST:/api/account/transact
+	 * @response `200` `ApiResponse` OK
+	 * @response `400` `ApiResponse` Bad request
+	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
+	 * @response `500` `ApiResponse` Internal server error
+	 */
+	export namespace TransactAccount {
+		export type RequestParams = {};
+		export type RequestQuery = {};
+		export type RequestBody = AccountTransactionRequest;
 		export type RequestHeaders = {};
 		export type ResponseBody = ApiResponse;
 	}

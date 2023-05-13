@@ -1,5 +1,6 @@
 import {
   ApiResponseStatus,
+  type AccountTransactionRequest,
   type CreateAccountGroupRequest,
   type CreateAccountRequest,
   type CreateStockRequest,
@@ -86,7 +87,10 @@ export const POST = (async ({ params, request }) => {
 			const jsonBody = (await request.json()) as CreateAccountRequest;
 			response = await accClient.createAccount(jsonBody);
 			return json(response);
-		} else {
+		} else if (remainingParams[0] === "transact") {
+      const jsonBody = (await request.json()) as AccountTransactionRequest;
+      return json(await accClient.transactAccount(jsonBody));
+    } else {
 			return serverError();
 		}
 	} else if (apiType === 'stock') {

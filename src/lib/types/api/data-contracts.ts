@@ -66,6 +66,16 @@ export interface CreateAccountGroupRequest {
 	currency?: string;
 }
 
+export interface AccountTransactionRequest {
+	/** @format int32 */
+	accountIdFrom?: number;
+	/** @format int32 */
+	accountIdTo?: number;
+	/** @format int32 */
+	amountsInCents?: number;
+	transactionType?: AccountTransactionRequestTransactionType;
+}
+
 export interface CreateAccountRequest {
 	accountType: CreateAccountRequestAccountType;
 	currency?: string;
@@ -200,6 +210,12 @@ export enum CreateStockRequestAssetClass {
 	EQUITY = 'EQUITY',
 	BOND = 'BOND',
 	CRYPTOCURRENCY = 'CRYPTOCURRENCY'
+}
+
+export enum AccountTransactionRequestTransactionType {
+	DEPOSIT = 'DEPOSIT',
+	WITHDRAW = 'WITHDRAW',
+	TRANSFER = 'TRANSFER'
 }
 
 export enum CreateAccountRequestAccountType {
