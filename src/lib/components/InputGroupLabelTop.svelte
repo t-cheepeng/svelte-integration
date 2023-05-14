@@ -1,7 +1,7 @@
 <script lang="ts">
 	export let label: string;
-	export let subLabel: string;
-	export let placeholder: string;
+	export let subLabel: string | undefined = undefined;
+	export let placeholder: string = "";
 	export let inputName: string | undefined = undefined;
 	export let required = false;
 	export let maxlength = 999999;
@@ -17,8 +17,10 @@
 	<label class="label" for={label}>
 		<span class="label-text text-xl font-bold">{label}{required ? '*' : ''}</span>
 	</label>
-	<label class="input-group">
-		<span class="bg-primary text-primary-content">{subLabel}</span>
+	<label class:input-group={subLabel !== undefined}>
+    {#if subLabel !== undefined}
+      <span class="bg-primary text-primary-content">{subLabel}</span>  
+    {/if}
     <input
       id={label}
       {type}

@@ -16,6 +16,7 @@
 	import { ApiResponseStatus, type AccountsResponse } from '$lib/types/api/data-contracts';
 	import type { Account } from '$lib/types/model';
 	import { ApiType, Fetcher, HttpMethod, type FetchResponse } from '$lib/utils/fetcher';
+	import { mapAccountResponseToModel } from '$lib/utils/mapper';
 	import { sleep } from '$lib/utils/utils';
 	import FaExchangeAlt from 'svelte-icons/fa/FaExchangeAlt.svelte';
 	import FaObjectUngroup from 'svelte-icons/fa/FaObjectUngroup.svelte';
@@ -51,16 +52,7 @@
 	data.streamed.data.then((response) => {
 		if (response.status === ApiResponseStatus.SUCCESS && response.data !== undefined) {
 			const responseAccounts: AccountsResponse = response.data;
-			accounts = responseAccounts.accounts.map((account) => {
-				return {
-					id: account.id,
-					accountName: account.name,
-					costBasis: 0,
-					currentValue: account.cashInCents ?? 0,
-					currency: account.currency,
-					groups: []
-				};
-			});
+			accounts = responseAccounts.accounts.map(mapAccountResponseToModel);
 			selectedAccount = responseAccounts.accounts.map((_) => false);
 			if (selectedAccount.length > 0) {
 				selectedAccount[0] = true;

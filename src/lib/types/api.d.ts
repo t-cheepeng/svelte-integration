@@ -1,13 +1,13 @@
-import type { ApiError } from './api/data-contracts';
+import type { ApiError, ApiResponseStatus } from './api/data-contracts';
 
 interface KnownApiResponse<T> {
-	status: string;
+	status: ApiResponseStatus;
 	errors?: ApiError[];
 	data?: T;
 }
 
 interface EmtpyKnownApiResponse {
-  status: string;
+  status: ApiResponseStatus;
   errors?: ApiError[];
   data: undefined | null;
 }

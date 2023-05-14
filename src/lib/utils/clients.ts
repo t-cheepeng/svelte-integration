@@ -70,10 +70,10 @@ export class AccountClient extends Client {
 		return await this.dispatchRequest(HttpMethod.PATCH, JSON.stringify(patchAccount));
 	}
 
-  async transactAccount(transactionRequest: Api.TransactAccount.RequestBody) {
-    this.baseUrl += "/transact";
-    return await this.dispatchRequest(HttpMethod.POST, JSON.stringify(transactionRequest));
-  }
+	async transactAccount(transactionRequest: Api.TransactAccount.RequestBody) {
+		this.baseUrl += '/transact';
+		return await this.dispatchRequest(HttpMethod.POST, JSON.stringify(transactionRequest));
+	}
 }
 
 export class StockClient extends Client {
@@ -117,6 +117,14 @@ export class StockClient extends Client {
 	async getAllTrades() {
 		this.baseUrl += '/trade/';
 		return (await this.dispatchRequest(HttpMethod.GET)) as KnownApiResponse<TradesResponse>;
+	}
+
+	async tradeStock(tradeRequest: Api.TradeStock.RequestBody) {
+		this.baseUrl += '/trade';
+		return (await this.dispatchRequest(
+			HttpMethod.POST,
+			JSON.stringify(tradeRequest)
+		)) as KnownApiResponse<EmtpyKnownApiResponse>;
 	}
 }
 

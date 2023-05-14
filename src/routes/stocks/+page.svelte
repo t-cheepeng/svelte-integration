@@ -4,8 +4,9 @@
 	import Fab from '$lib/components/Fab.svelte';
 	import ProgressIndicator from '$lib/components/ProgressIndicator.svelte';
 	import { NotificationType, addStock, addToast, addToastFromApiErrors } from '$lib/stores/stores';
-	import { ApiResponseStatus, StockResponseAssetClass } from '$lib/types/api/data-contracts';
+	import { ApiResponseStatus } from '$lib/types/api/data-contracts';
 	import type { Stock } from '$lib/types/model';
+	import { mapStockResponseToModel } from '$lib/utils/mapper';
 	import FaSearchDollar from 'svelte-icons/fa/FaSearchDollar.svelte';
 	import type { PageData } from './$types';
 	import StockCard from './StockCard.svelte';
@@ -23,16 +24,7 @@
 							stock.displayTickerSymbol !== undefined &&
 							stock.name !== undefined
 					)
-					.map((stock) => {
-						{
-							return {
-								assetClass: stock.assetClass as StockResponseAssetClass,
-								currency: stock.currency as string,
-								displayTickerSymbol: stock.displayTickerSymbol as string,
-								name: stock.name as string
-							};
-						}
-					}) ?? [];
+					.map(mapStockResponseToModel) ?? [];
 		} else if (response.status === ApiResponseStatus.FAIL && response.errors !== undefined) {
 			addToastFromApiErrors(response.errors);
 		} else {
