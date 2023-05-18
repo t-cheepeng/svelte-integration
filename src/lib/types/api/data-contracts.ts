@@ -74,6 +74,8 @@ export interface AccountTransactionRequest {
 	/** @format int32 */
 	amountsInCents?: number;
 	transactionType?: AccountTransactionRequestTransactionType;
+	/** @format int32 */
+	exchangeRateInMilli?: number;
 }
 
 export interface CreateAccountRequest {

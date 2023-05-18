@@ -10,6 +10,7 @@
 	  NotificationType,
 	  addToast,
 	  editAccount,
+	  setAllAccounts,
 	  transact
 	} from '$lib/stores/stores';
 	import type { EmtpyKnownApiResponse } from '$lib/types/api';
@@ -53,6 +54,7 @@
 		if (response.status === ApiResponseStatus.SUCCESS && response.data !== undefined) {
 			const responseAccounts: AccountsResponse = response.data;
 			accounts = responseAccounts.accounts.map(mapAccountResponseToModel);
+      setAllAccounts(accounts);
 			selectedAccount = responseAccounts.accounts.map((_) => false);
 			if (selectedAccount.length > 0) {
 				selectedAccount[0] = true;

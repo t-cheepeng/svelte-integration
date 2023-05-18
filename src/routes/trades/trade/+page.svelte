@@ -6,6 +6,7 @@
 	import { NotificationType, addToast, addToastFromApiErrors } from '$lib/stores/stores.js';
 	import { ApiResponseStatus, TradeStockRequestTradeType } from '$lib/types/api/data-contracts.js';
 	import type { Account, Stock, Trade } from '$lib/types/model.js';
+	import { MILLI_INPUT_STEPS } from '$lib/utils/constants.js';
 	import {
 	  convertMillicentsToDollarAndCents,
 	  getMillicentsFromDollarAndCents
@@ -146,7 +147,7 @@
 					required
 					label="Price Per Unit"
 					subLabel="Price"
-					step="0.00001"
+					step={MILLI_INPUT_STEPS}
 					type="number"
 					inputName={FormFields.PRICE_PER_UNIT_IN_MILLI}
 					placeholder="0.00000"
@@ -155,7 +156,7 @@
 				<InputGroupLabelTop
 					label="Fee"
 					subLabel="Fee"
-					step="0.00001"
+					step={MILLI_INPUT_STEPS}
 					type="number"
 					inputName={FormFields.FEE_IN_MILLI}
 					placeholder="0.00000"

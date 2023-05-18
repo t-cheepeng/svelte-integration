@@ -61,3 +61,8 @@ export function transact(account: Account) {
 export function removeTransactAccount() {
   transactAccount.set(undefined);
 }
+
+export const allAccounts = writable<Account[]>();
+export const setAllAccounts = (accounts: Account[]) => {
+  allAccounts.set(accounts);
+}

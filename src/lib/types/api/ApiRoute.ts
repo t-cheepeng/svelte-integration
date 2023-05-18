@@ -36,7 +36,7 @@ export namespace Api {
 	 * @summary Add a stock trade for account
 	 * @request POST:/api/stock/trade
 	 * @response `200` `ApiResponse` Stock trade is added for account successfully
-	 * @response `400` `ApiResponse` Bad request
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
 	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
 	 * @response `500` `ApiResponse` Internal server error
 	 */
@@ -55,7 +55,7 @@ export namespace Api {
 	 * @summary Create a stock and ticker to api mappings
 	 * @request POST:/api/stock/create
 	 * @response `200` `ApiResponse` Stock and ticker to api mapping is created successfully
-	 * @response `400` `ApiResponse` Bad request
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
 	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
 	 * @response `500` `ApiResponse` Internal server error
 	 */
@@ -74,7 +74,7 @@ export namespace Api {
 	 * @summary Group an account under account group
 	 * @request POST:/api/group/group
 	 * @response `200` `ApiResponse` Account is grouped under account group successfully
-	 * @response `400` `ApiResponse` Bad request
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
 	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
 	 * @response `500` `ApiResponse` Internal server error
 	 */
@@ -93,7 +93,7 @@ export namespace Api {
 	 * @summary Create an account group
 	 * @request POST:/api/group/create
 	 * @response `200` `ApiResponse` Account group is created successfully
-	 * @response `400` `ApiResponse` Bad request
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
 	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
 	 * @response `500` `ApiResponse` Internal server error
 	 */
@@ -109,9 +109,10 @@ export namespace Api {
 	 * No description
 	 * @tags account-controller
 	 * @name TransactAccount
+	 * @summary Deposit, withdraw, or transfer money from an account
 	 * @request POST:/api/account/transact
-	 * @response `200` `ApiResponse` OK
-	 * @response `400` `ApiResponse` Bad request
+	 * @response `200` `ApiResponse` Transaction is created successfully
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
 	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
 	 * @response `500` `ApiResponse` Internal server error
 	 */
@@ -130,7 +131,7 @@ export namespace Api {
 	 * @summary Create an account
 	 * @request POST:/api/account/create
 	 * @response `200` `ApiResponse` Account is created successfully
-	 * @response `400` `ApiResponse` Bad request
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
 	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
 	 * @response `500` `ApiResponse` Internal server error
 	 */
@@ -149,7 +150,7 @@ export namespace Api {
 	 * @summary Update a stock. All aspects of the stock can be updated
 	 * @request PATCH:/api/stock/base
 	 * @response `200` `ApiResponse` Stock is updated successfully
-	 * @response `400` `ApiResponse` Bad request
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
 	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
 	 * @response `500` `ApiResponse` Internal server error
 	 */
@@ -168,7 +169,7 @@ export namespace Api {
 	 * @summary Update an account. Only the name and description can be updated
 	 * @request PATCH:/api/account/update
 	 * @response `200` `ApiResponse` Account is updated successfully
-	 * @response `400` `ApiResponse` Bad request
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
 	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
 	 * @response `500` `ApiResponse` Internal server error
 	 */
@@ -187,7 +188,7 @@ export namespace Api {
 	 * @summary Get a stock by its name
 	 * @request GET:/api/stock/{stockName}
 	 * @response `200` `StockResponse` Stock found
-	 * @response `400` `ApiResponse` Bad request
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
 	 * @response `404` `ApiResponse` Unable to find account or account is deleted
 	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
 	 * @response `500` `ApiResponse` Internal server error
@@ -213,7 +214,7 @@ export namespace Api {
 	 * @summary Delete a stock by its name
 	 * @request DELETE:/api/stock/{stockName}
 	 * @response `200` `AccountResponse` Stock deleted
-	 * @response `400` `ApiResponse` Bad request
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
 	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
 	 * @response `500` `ApiResponse` Internal server error
 	 */
@@ -238,7 +239,7 @@ export namespace Api {
 	 * @summary Get all trades
 	 * @request GET:/api/stock/trade/
 	 * @response `200` `TradesResponse` Returns all trades in database or an empty list of nothing is in database.
-	 * @response `400` `ApiResponse` Bad request
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
 	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
 	 * @response `500` `ApiResponse` Internal server error
 	 */
@@ -257,7 +258,7 @@ export namespace Api {
 	 * @summary Query a stock from external APIs
 	 * @request GET:/api/stock/search/{query}
 	 * @response `200` `SearchResponseData` Stock found in external APIs
-	 * @response `400` `ApiResponse` Bad request
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
 	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
 	 * @response `500` `ApiResponse` Internal server error
 	 */
@@ -278,7 +279,7 @@ export namespace Api {
 	 * @summary Get all stocks
 	 * @request GET:/api/stock/
 	 * @response `200` `StocksResponse` Returns all stocks in database or an empty list of nothing is in database.
-	 * @response `400` `ApiResponse` Bad request
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
 	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
 	 * @response `500` `ApiResponse` Internal server error
 	 */
@@ -297,7 +298,7 @@ export namespace Api {
 	 * @summary Get all groups and account to group mappings
 	 * @request GET:/api/group/map/all
 	 * @response `200` `GroupMappingsResponse` All groups and account to group mappings retrieved. Will return empty lists as well
-	 * @response `400` `ApiResponse` Bad request
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
 	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
 	 * @response `500` `ApiResponse` Internal server error
 	 */
@@ -316,7 +317,7 @@ export namespace Api {
 	 * @summary Get an account by its ID
 	 * @request GET:/api/account/{accountId}
 	 * @response `200` `AccountResponse` Account found
-	 * @response `400` `ApiResponse` Bad request
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
 	 * @response `404` `ApiResponse` Unable to find account or account is deleted
 	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
 	 * @response `500` `ApiResponse` Internal server error
@@ -343,7 +344,7 @@ export namespace Api {
 	 * @summary Delete an account by its ID
 	 * @request DELETE:/api/account/{accountId}
 	 * @response `200` `ApiResponse` Account deleted
-	 * @response `400` `ApiResponse` Bad request
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
 	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
 	 * @response `500` `ApiResponse` Internal server error
 	 */
@@ -369,7 +370,7 @@ export namespace Api {
 	 * @summary Get all accounts
 	 * @request GET:/api/account/
 	 * @response `200` `AccountsResponse` Accounts found. List can be empty and still return 200. Deleted accounts are not returned
-	 * @response `400` `ApiResponse` Bad request
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
 	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
 	 * @response `500` `ApiResponse` Internal server error
 	 */

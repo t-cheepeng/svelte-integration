@@ -18,7 +18,7 @@
 		name={selectName}
 		{required}
 		{disabled}
-		on:selectionchange
+		on:change
 	>
 		<option disabled selected={value === undefined} />
 		{#each options as option, idx}

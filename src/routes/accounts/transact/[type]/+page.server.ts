@@ -4,6 +4,7 @@ import type {
   AccountTransactionRequestTransactionType
 } from '$lib/types/api/data-contracts.js';
 import { ApiType, Fetcher, HttpMethod, type FetchResponse } from '$lib/utils/fetcher.js';
+import { getMillicentsFromDollarAndCents } from '$lib/utils/utils.js';
 import { verifyNotBlank } from '$lib/utils/verifier.js';
 import { error, fail } from '@sveltejs/kit';
 import { FormFields } from './form.js';
@@ -23,6 +24,7 @@ export const actions = {
 		const accountIdFrom = formData.get(FormFields.ACCOUNT_ID_FROM);
 		const accountIdTo = formData.get(FormFields.ACCOUNT_ID_TO);
 		const amountInCents = formData.get(FormFields.AMOUNT_IN_CENTS);
+		const exchangeRateInMilli = formData.get(FormFields.EXCHANGE_RATE_IN_MILLI);
 
 		const verfResult = verifyNotBlank([transactionType, accountIdFrom, amountInCents]);
 		const displayFieldName = ['Transaction type', 'Account', 'Amount'];
@@ -51,6 +53,12 @@ export const actions = {
 		};
 		if (accountIdTo !== null) {
 			transactAccountRequest.accountIdTo = Number.parseInt(accountIdTo.toString());
+		}
+
+		if (exchangeRateInMilli !== null) {
+			transactAccountRequest.exchangeRateInMilli = getMillicentsFromDollarAndCents(
+				exchangeRateInMilli.toString()
+			);
 		}
 
 		const fetcher = new Fetcher(event);

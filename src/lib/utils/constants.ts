@@ -1,3 +1,5 @@
+export const MILLI_INPUT_STEPS = '0.00001';
+export const ONE_DOLLAR_IN_MILLICENTS = 100000;
 export const ASSET_CLASSES: string[] = ['ETF', 'EQUITY', 'BOND', 'CRYPTOCURRENCY'];
 
 export const CURRENCIES: string[] = [
