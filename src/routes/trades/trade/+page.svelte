@@ -7,10 +7,6 @@
 	import { ApiResponseStatus, TradeStockRequestTradeType } from '$lib/types/api/data-contracts.js';
 	import type { Account, Stock, Trade } from '$lib/types/model.js';
 	import { MILLI_INPUT_STEPS } from '$lib/utils/constants.js';
-	import {
-	  convertMillicentsToDollarAndCents,
-	  getMillicentsFromDollarAndCents
-	} from '$lib/utils/utils.js';
 	import moment from 'moment';
 	import FaHandHoldingUsd from 'svelte-icons/fa/FaHandHoldingUsd.svelte';
 	import { FormFields } from './form.js';
@@ -79,10 +75,10 @@
 		}
 
 		console.log(unit, price, fee);
-		const totalAmt = getMillicentsFromDollarAndCents(price) * Number.parseInt(unit);
-		const feeAmt = getMillicentsFromDollarAndCents(fee);
-		withFee = convertMillicentsToDollarAndCents(totalAmt + feeAmt);
-		withoutFee = convertMillicentsToDollarAndCents(totalAmt);
+		const totalAmt = Number.parseFloat(price) * Number.parseInt(unit);
+		const feeAmt = Number.parseFloat(fee);
+		withFee = (totalAmt + feeAmt).toFixed(5);
+		withoutFee = totalAmt.toFixed(5);
     if (totalAmt !== 0) {
       const feeOverTotal = feeAmt / (totalAmt + feeAmt);
       feeAsPct = (feeOverTotal * 100).toFixed(2);

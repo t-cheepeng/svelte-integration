@@ -4,7 +4,7 @@ export interface Account {
   id: number;
   accountName: string;
   costBasis: number;
-  currentValue: number;
+  currentValue: string;
   currency: string;
   groups: string[];
 }
@@ -30,10 +30,10 @@ export interface SearchResult {
 export interface Trade {
   tradeType: TradeResponseTradeType;
   tradeTs: string;
-  fee: number;
+  fee: string;
   stockName: string;
   numOfUnits: number;
-  pricePerUnit: number;
+  pricePerUnit: string;
 }
 
 export interface Group {

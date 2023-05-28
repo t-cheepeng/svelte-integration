@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { TradeResponseTradeType } from '$lib/types/api/data-contracts';
 	import type { Trade } from '$lib/types/model';
-	import { convertFullTimestampToReadableDateTime, convertMillicentsToDollarAndCents } from '$lib/utils/utils';
+	import {
+	  convertFullTimestampToReadableDateTime,
+	  convertToReadableMonetary
+	} from '$lib/utils/utils';
 	import FaRegQuestionCircle from 'svelte-icons/fa/FaRegQuestionCircle.svelte';
 	import MdAddCircleOutline from 'svelte-icons/md/MdAddCircleOutline.svelte';
 	import MdAttachMoney from 'svelte-icons/md/MdAttachMoney.svelte';
@@ -33,12 +36,16 @@
 		</span>
 		<div class="col-span-9 flex-row justify-evenly">
 			<p class="text-xl font-extrabold">{trade.stockName}</p>
-      <p>Traded at: {convertFullTimestampToReadableDateTime(trade.tradeTs)}</p>
-			<p>Fee: {convertMillicentsToDollarAndCents(trade.fee)}</p>
+			<p>Traded at: {convertFullTimestampToReadableDateTime(trade.tradeTs)}</p>
+			<p>Fee: {convertToReadableMonetary(trade.fee)}</p>
 		</div>
 		<div class="col-span-2 items-center flex">
 			<p class="text-2xl font-medium">
-				{`${trade.tradeType === TradeResponseTradeType.SELL ? '+' : '-'}${convertMillicentsToDollarAndCents(trade.numOfUnits * trade.pricePerUnit)}`}
+				{convertToReadableMonetary(
+					`${trade.tradeType === TradeResponseTradeType.SELL ? '+' : '-'}${
+						trade.numOfUnits * Number.parseFloat(trade.pricePerUnit)
+					}`
+				)}
 			</p>
 		</div>
 	</div>

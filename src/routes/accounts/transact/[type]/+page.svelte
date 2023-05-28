@@ -11,11 +11,8 @@
 	  transactAccount
 	} from '$lib/stores/stores';
 	import { ApiResponseStatus } from '$lib/types/api/data-contracts.js';
-	import { MILLI_INPUT_STEPS, ONE_DOLLAR_IN_MILLICENTS } from '$lib/utils/constants.js';
-	import {
-	  convertCentsToDollarAndCents,
-	  getMillicentsFromDollarAndCents
-	} from '$lib/utils/utils.js';
+	import { MILLI_INPUT_STEPS } from '$lib/utils/constants.js';
+	import { convertToReadableMonetary } from '$lib/utils/utils.js';
 	import FaCashRegister from 'svelte-icons/fa/FaCashRegister.svelte';
 	import { FormFields } from './form.js';
 
@@ -24,11 +21,11 @@
 	let actionMessage: string;
 	let amtChange: string = '0';
 	let exchangeRate: string = '0';
-	let fromFinalAmt: number = 0;
-	let toFinalAmt: number = 0;
+	let fromFinalAmt: string = '0';
+	let toFinalAmt: string = '0';
 	let selectedAccId: string | undefined = undefined;
-	let toStartAmt: number = 0;
-	
+	let toStartAmt: string = '0';
+
 	$: accounts = $allAccounts;
 	$: type = data.type.slice(0, 1).toUpperCase() + data.type.slice(1).toLowerCase();
 	$: {
@@ -41,7 +38,7 @@
 		}
 	}
 	$: transactableAccount = $transactAccount;
-	$: fromFinalAmt = transactableAccount?.currentValue ?? 0;
+	$: fromFinalAmt = convertToReadableMonetary(transactableAccount?.currentValue ?? '0');
 	$: {
 		if (form?.errorMsg) {
 			addToast(form.errorMsg, NotificationType.ERROR);
@@ -56,29 +53,35 @@
 	}
 	$: {
 		if (selectedAccId !== undefined) {
-			toStartAmt = accounts.find((acc) => acc.id.toString() === selectedAccId)?.currentValue ?? 0;
+			toStartAmt = convertToReadableMonetary(
+				accounts.find((acc) => acc.id.toString() === selectedAccId)?.currentValue ?? '0'
+			);
 			toFinalAmt = toStartAmt;
 		}
 	}
 	$: {
 		if (amtChange === '' || (type === 'Transfer' && exchangeRate === '')) {
-			fromFinalAmt = transactableAccount?.currentValue ?? 0;
-			toFinalAmt = accounts.find((acc) => acc.id.toString() === selectedAccId)?.currentValue ?? 0;
+			fromFinalAmt = convertToReadableMonetary(transactableAccount?.currentValue ?? '0');
+			toFinalAmt = convertToReadableMonetary(
+				accounts.find((acc) => acc.id.toString() === selectedAccId)?.currentValue ?? '0'
+			);
 		} else {
-			const amountInParts = amtChange.split('.');
-			const changedAmt =
-				amountInParts.length === 1
-					? Number.parseInt(amountInParts[0]) * 100
-					: Number.parseInt(amountInParts[0]) * 100 + Number.parseInt(amountInParts[1].slice(0, 2));
+			const changedAmt = Number.parseFloat(amtChange);
 			if (type === 'Deposit') {
-				fromFinalAmt = (transactableAccount?.currentValue ?? 0) + changedAmt;
+				const depositedAmt =
+					Number.parseFloat(transactableAccount?.currentValue ?? '0') + changedAmt;
+				fromFinalAmt = depositedAmt.toFixed(2);
 			} else if (type === 'Withdraw') {
-				fromFinalAmt = (transactableAccount?.currentValue ?? 0) - changedAmt;
+				const withdrawnAmt =
+					Number.parseFloat(transactableAccount?.currentValue ?? '0') - changedAmt;
+				fromFinalAmt = withdrawnAmt.toFixed(2);
 			} else {
 				if (exchangeRate !== '0') {
-					const rate = getMillicentsFromDollarAndCents(exchangeRate) / ONE_DOLLAR_IN_MILLICENTS;
-					fromFinalAmt = (transactableAccount?.currentValue ?? 0) - changedAmt;
-					toFinalAmt = toStartAmt + changedAmt * rate;
+					const rate = Number.parseFloat(exchangeRate);
+					const finalAmt = Number.parseFloat(transactableAccount?.currentValue ?? '0') - changedAmt;
+					fromFinalAmt = finalAmt.toFixed(2);
+					const calcFinalAmt = Number.parseFloat(toStartAmt) + changedAmt * rate;
+					toFinalAmt = calcFinalAmt.toFixed(2);
 				}
 			}
 		}
@@ -125,7 +128,7 @@
 							label="Transfer To"
 							selectName={FormFields.ACCOUNT_ID_TO}
 							options={accounts
-								.filter(acc => acc.accountName !== transactableAccount?.accountName)
+								.filter((acc) => acc.accountName !== transactableAccount?.accountName)
 								.map((account) => account.accountName)}
 							values={accounts
 								.filter((acc) => acc.accountName !== transactableAccount?.accountName)
@@ -182,17 +185,13 @@
 						<div class="flex items-center flex-col">
 							<p class="text-2xl mb-2">Account From</p>
 							<p class="text-xl font-bold">
-								{convertCentsToDollarAndCents(transactableAccount.currentValue) +
-									' → ' +
-									convertCentsToDollarAndCents(fromFinalAmt)}
+								{convertToReadableMonetary(transactableAccount.currentValue) + ' → ' + fromFinalAmt}
 							</p>
 						</div>
 						<div class="flex items-center flex-col">
 							<p class="text-2xl mb-2">Account To</p>
 							<p class="text-xl font-bold">
-								{convertCentsToDollarAndCents(toStartAmt) +
-									' → ' +
-									convertCentsToDollarAndCents(toFinalAmt)}
+								{toStartAmt + ' → ' + toFinalAmt}
 							</p>
 						</div>
 					</div>
@@ -200,9 +199,7 @@
 					<div class="flex items-center flex-col">
 						<p class="text-2xl mb-2">Change in account value</p>
 						<p class="text-xl font-bold">
-							{convertCentsToDollarAndCents(transactableAccount.currentValue) +
-								' → ' +
-								convertCentsToDollarAndCents(fromFinalAmt)}
+							{convertToReadableMonetary(transactableAccount.currentValue) + ' → ' + fromFinalAmt}
 						</p>
 					</div>
 				{/if}

@@ -31,13 +31,11 @@ export interface TradeStockRequest {
 	tradeType: TradeStockRequestTradeType;
 	/** @format int32 */
 	numOfUnits: number;
-	/** @format int32 */
-	pricePerUnitInMilli: number;
+	price: string;
 	name?: string;
 	/** @format int32 */
 	accountId: number;
-	/** @format int32 */
-	feeInMilli?: number;
+	fee?: string;
 	/** @format int32 */
 	buyId?: number;
 }
@@ -71,11 +69,9 @@ export interface AccountTransactionRequest {
 	accountIdFrom?: number;
 	/** @format int32 */
 	accountIdTo?: number;
-	/** @format int32 */
-	amountsInCents?: number;
+	amount: string;
 	transactionType?: AccountTransactionRequestTransactionType;
-	/** @format int32 */
-	exchangeRateInMilli?: number;
+	exchangeRate?: string;
 }
 
 export interface CreateAccountRequest {
@@ -87,8 +83,7 @@ export interface CreateAccountRequest {
 	 */
 	description?: string;
 	name?: string;
-	/** @format int32 */
-	cashInCents?: number;
+	cash?: string;
 }
 
 export interface PatchStockRequest {
@@ -126,13 +121,11 @@ export interface TradeResponse {
 	tradeType?: TradeResponseTradeType;
 	/** @format int32 */
 	numOfUnits?: number;
-	/** @format int32 */
-	pricePerUnit?: number;
+	pricePerUnit?: string;
 	name?: string;
 	/** @format int32 */
 	account?: number;
-	/** @format int32 */
-	fee?: number;
+	fee?: string;
 	/** @format int32 */
 	buyId?: number;
 }
@@ -187,8 +180,8 @@ export interface AccountResponse {
 	currency: string;
 	description?: string;
 	name: string;
-	/** @format int32 */
-	cashInCents?: number;
+	cash?: string;
+	assetValue?: string;
 }
 
 export interface AccountsResponse {
@@ -246,8 +239,9 @@ export enum TradeResponseTradeType {
 }
 
 export enum ExternalSearchResponseApiUsed {
-	YAHOO_FINANCE = 'YAHOO_FINANCE',
-	RAW_URL = 'RAW_URL'
+	ALPACA_MARKET = 'ALPACA_MARKET',
+	SGX = 'SGX',
+	YAHOO_FINANCE = 'YAHOO_FINANCE'
 }
 
 export enum AccountResponseAccountType {

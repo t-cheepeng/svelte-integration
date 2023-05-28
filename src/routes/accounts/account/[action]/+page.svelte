@@ -12,6 +12,7 @@
 	} from '$lib/stores/stores.js';
 	import { ApiResponseStatus } from '$lib/types/api/data-contracts.js';
 	import { CURRENCIES } from '$lib/utils/constants';
+	import { convertToReadableMonetary } from '$lib/utils/utils';
 	import MdAccountBalance from 'svelte-icons/md/MdAccountBalance.svelte';
 	import { FormFields } from './form';
 
@@ -87,7 +88,7 @@
 						placeholder="10000"
 						inputName={FormFields.BALANCE}
 						type="number"
-						value={mode === 'create' ? '0' : account?.currentValue.toString() ?? '0'}
+						value={mode === 'create' ? '0' : convertToReadableMonetary(account?.currentValue.toString() ?? '0')}
 						disabled={mode === 'edit'}
 					/>
 				</span>

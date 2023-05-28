@@ -48,7 +48,7 @@ export const load = (async (event) => {
 						id: group.accountsInGroup[i],
 						accountName: accountResJson.data.name,
 						costBasis: 0,
-						currentValue: 0,
+						currentValue: "0",
 						currency: accountResJson.data.currency,
 						groups: []
 					});

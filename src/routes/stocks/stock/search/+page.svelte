@@ -28,7 +28,7 @@
 						stockClass: response.stockClass ?? '',
 						exchangeCountry: response.exchangeCountry ?? '',
 						searchScore: response.searchScore ?? 0,
-						apiUsed: response.apiUsed ?? ExternalSearchResponseApiUsed.RAW_URL
+						apiUsed: response.apiUsed ?? ExternalSearchResponseApiUsed.ALPACA_MARKET
 					};
 				}) ?? [];
 

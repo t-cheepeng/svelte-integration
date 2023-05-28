@@ -61,14 +61,13 @@ export const actions = {
 				});
 			}
 		}
-		const cashInCents = balance?.toString() ?? '0';
 
 		const createAccountRequest: Api.CreateAccount.RequestBody = {
 			accountType: accType.toString() as CreateAccountRequestAccountType,
 			currency: currency.toString(),
 			description: formData.get(FormFields.DESCRIPTION)?.toString(),
 			name: accName.toString(),
-			cashInCents: Number.parseInt(cashInCents)
+			cash: balance?.toString() ?? "0"
 		};
 		const fetcher = new Fetcher(event);
 		const response = (await fetcher.fetchFor(
