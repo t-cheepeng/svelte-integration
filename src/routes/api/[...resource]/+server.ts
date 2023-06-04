@@ -1,5 +1,6 @@
 import {
   ApiResponseStatus,
+  type AccountAccountGroupRequest,
   type AccountTransactionRequest,
   type CreateAccountGroupRequest,
   type CreateAccountRequest,
@@ -12,17 +13,30 @@ import { AccountClient, GroupClient, StockClient } from '$lib/utils/clients';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-const handleGetAccountEndpoints = async (remainingParams: string[]) => {
+const handleGetAccountEndpoints = async (remainingParams: string[], url: URL) => {
 	const accClient = new AccountClient();
-	let response;
 
-	if (remainingParams[0] !== undefined) {
-		response = await accClient.getAccount({ accountId: Number.parseInt(remainingParams[0]) });
-	} else {
-		response = await accClient.getAllAccounts();
+	if (remainingParams.length === 0) {
+		return json(await accClient.getAllAccounts());
 	}
 
-	return json(response);
+	if (remainingParams[0] === 'history') {
+		return json(
+			await accClient.getHistory(
+				{ accountId: Number.parseInt(remainingParams[1]) },
+				{
+					tradePage: Number.parseInt(url.searchParams.get('tradePage') ?? '0'),
+					transactionPage: Number.parseInt(url.searchParams.get('transactionPage') ?? '0')
+				}
+			)
+		);
+	}
+
+	if (remainingParams[0] !== undefined) {
+		return json(await accClient.getAccount({ accountId: Number.parseInt(remainingParams[0]) }));
+	}
+
+	return serverError();
 };
 
 const handleGetStockEndpoints = async (remainingParams: string[]) => {
@@ -45,10 +59,11 @@ const handleGetGroupEndpoints = async (remainingParams: string[]) => {
 	return json(response);
 };
 
-export const GET = (async ({ params }) => {
+export const GET = (async ({ params, url }) => {
 	const [apiType, ...remainingParams] = params.resource.split('/');
+
 	if (apiType === 'account') {
-		return handleGetAccountEndpoints(remainingParams);
+		return handleGetAccountEndpoints(remainingParams, url);
 	} else if (apiType === 'stock') {
 		return handleGetStockEndpoints(remainingParams);
 	} else if (apiType === 'group') {
@@ -58,7 +73,7 @@ export const GET = (async ({ params }) => {
 	}
 }) satisfies RequestHandler;
 
-export const DELETE = (async ({ params }) => {
+export const DELETE = (async ({ params, request }) => {
 	const [apiType, ...remainingParams] = params.resource.split('/');
 
 	if (apiType === 'account') {
@@ -72,6 +87,11 @@ export const DELETE = (async ({ params }) => {
 		}
 
 		return json(response);
+	} else if (apiType === 'group') {
+		const groupClient = new GroupClient();
+		return json(
+			await groupClient.ungroupAccount((await request.json()) as AccountAccountGroupRequest)
+		);
 	} else {
 		return serverError();
 	}
@@ -95,7 +115,6 @@ export const POST = (async ({ params, request }) => {
 			return serverError();
 		}
 	} else if (apiType === 'stock') {
-    console.log(remainingParams);
 		const stockClient = new StockClient();
 		let response;
 		if (remainingParams[0] === 'trade') {
@@ -103,15 +122,20 @@ export const POST = (async ({ params, request }) => {
 		} else if (remainingParams[0] === 'create') {
 			response = await stockClient.createStock((await request.json()) as CreateStockRequest);
 		} else {
-      response = serverError();
-    }
+			response = serverError();
+		}
 
 		return json(response);
 	} else if (apiType === 'group') {
 		const groupClient = new GroupClient();
-		const response = await groupClient.createGroup(
-			(await request.json()) as CreateAccountGroupRequest
-		);
+		let response;
+		if (remainingParams[0] === 'group') {
+			response = await groupClient.groupAccount(
+				(await request.json()) as AccountAccountGroupRequest
+			);
+		} else {
+			response = await groupClient.createGroup((await request.json()) as CreateAccountGroupRequest);
+		}
 
 		return json(response);
 	}

@@ -2,12 +2,18 @@ import type { EmtpyKnownApiResponse } from '$lib/types/api';
 import type { Api } from '$lib/types/api/ApiRoute';
 import {
   CreateStockRequestAssetClass,
+  ExternalSearchResponseApiUsed,
   PatchStockRequestAssetClass
 } from '$lib/types/api/data-contracts';
 import { ApiType, Fetcher, HttpMethod, type FetchResponse } from '$lib/utils/fetcher';
 import { verifyNotBlank } from '$lib/utils/verifier';
 import { error, fail } from '@sveltejs/kit';
 import { FormFields } from './form';
+
+interface TickerToApi {
+	displayTickerSymbol?: string;
+	apiUsed?: ExternalSearchResponseApiUsed;
+}
 
 export function load({ params }) {
 	if (!['create', 'edit'].includes(params.action)) {
@@ -24,10 +30,46 @@ export const actions = {
 		const stockName = formData.get(FormFields.stockName);
 		const currency = formData.get(FormFields.currency);
 		const assetClass = formData.get(FormFields.assetClass);
-		const displayTickerSymbol = formData.get(FormFields.displayTickerSymbol);
+		const tickerToApiMapping: TickerToApi[] = [];
+		const formIterator = formData.entries();
+		let formIteratorResult = formIterator.next();
+		while (formIteratorResult.done !== undefined && !formIteratorResult.done) {
+			const key = formIteratorResult.value[0];
+			if (!key.startsWith(FormFields.tickerToApiMapping)) {
+				formIteratorResult = formIterator.next();
+				continue;
+			}
 
-		const verfResult = verifyNotBlank([stockName, currency, assetClass, displayTickerSymbol]);
-		const displayFieldName = ['Stock name', 'Currency', 'Asset class', 'Ticker symbol'];
+			const [_, idxString, field] = key.split('.');
+			const idx = Number.parseInt(idxString);
+			if (tickerToApiMapping[idx] === undefined) {
+				const tickerToApiMappingObj: TickerToApi = {};
+				if (field === FormFields.displayTickerSymbol) {
+					tickerToApiMappingObj.displayTickerSymbol = formIteratorResult.value[1].toString();
+				} else {
+					tickerToApiMappingObj.apiUsed =
+						formIteratorResult.value[1].toString() as ExternalSearchResponseApiUsed;
+				}
+				tickerToApiMapping[idx] = tickerToApiMappingObj;
+			} else {
+				const tickerToApiMappingObj = tickerToApiMapping[idx];
+				if (field === FormFields.displayTickerSymbol) {
+					tickerToApiMappingObj.displayTickerSymbol = formIteratorResult.value[1].toString();
+				} else {
+					tickerToApiMappingObj.apiUsed =
+						formIteratorResult.value[1].toString() as ExternalSearchResponseApiUsed;
+				}
+			}
+
+			formIteratorResult = formIterator.next();
+		}
+
+		if (tickerToApiMapping.length === 0) {
+			return fail(400, { errorMsg: `Ticker to API cannot be empty` });
+		}
+
+		const verfResult = verifyNotBlank([stockName, currency, assetClass]);
+		const displayFieldName = ['Stock name', 'Currency', 'Asset class', 'Ticker symbol', 'API'];
 		for (let i = 0; i < verfResult.length; i++) {
 			if (!verfResult[i]) {
 				return fail(400, { errorMsg: `${displayFieldName[i]} cannot be empty` });
@@ -37,7 +79,6 @@ export const actions = {
 		const verfStockName = stockName as FormDataEntryValue;
 		const verfCurrency = currency as FormDataEntryValue;
 		const notBlankAsset = assetClass as FormDataEntryValue;
-		const verfTicker = displayTickerSymbol as FormDataEntryValue;
 
 		if (
 			notBlankAsset.toString() !== CreateStockRequestAssetClass.BOND &&
@@ -51,16 +92,19 @@ export const actions = {
 		}
 
 		const verfAsset = notBlankAsset as CreateStockRequestAssetClass;
-		const apiTickers = {
-			YAHOO_FINANCE: verfTicker.toString()
-		};
+		const apiTickers: Record<string, string> = {};
+		tickerToApiMapping.forEach((tickerToApi) => {
+			if (tickerToApi.apiUsed !== undefined && tickerToApi.displayTickerSymbol !== undefined) {
+				apiTickers[tickerToApi.apiUsed] = tickerToApi.displayTickerSymbol;
+			}
+		});
 
 		const createStockRequest: Api.CreateStock.RequestBody = {
 			name: verfStockName.toString(),
 			currency: verfCurrency.toString(),
 			assetClass: verfAsset,
 			apiTickers: apiTickers,
-			displayTickerSymbol: verfTicker.toString()
+			displayTickerSymbol: tickerToApiMapping[0].displayTickerSymbol ?? 'NO.SYMBOL'
 		};
 
 		const fetcher = new Fetcher(event);

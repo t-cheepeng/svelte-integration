@@ -1,8 +1,14 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
+	import Divider from '$lib/components/Divider.svelte';
 	import SearchBox from '$lib/components/SearchBox.svelte';
-	import { NotificationType, addStockSearchResult, addToast, addToastFromApiErrors } from '$lib/stores/stores';
+	import {
+	  NotificationType,
+	  addStockSearchResult,
+	  addToast,
+	  addToastFromApiErrors
+	} from '$lib/stores/stores';
 	import { ApiResponseStatus, ExternalSearchResponseApiUsed } from '$lib/types/api/data-contracts';
 	import type { SearchResult } from '$lib/types/model';
 	import FaDollarSign from 'svelte-icons/fa/FaDollarSign.svelte';
@@ -13,6 +19,7 @@
 	export let form;
 	let isSearchEmpty: boolean = true;
 	let searchResults: SearchResult[] = [];
+	let selectedSearchResults: SearchResult[] = [];
 
 	$: {
 		if (form?.errorMsg !== undefined) {
@@ -38,12 +45,43 @@
 		}
 	}
 
-  function selectResult(selectedResult: CustomEvent<SearchResult>) {
-    addStockSearchResult(selectedResult.detail);
-    if (browser) {
-      goto("/stocks/stock/create")
-    }
-  }
+	function selectResult(selectionEvent: CustomEvent<SearchResult>) {
+		const selectedSearch = selectionEvent.detail;
+
+		const possibleIdx = selectedSearchResults.findIndex(
+			(selectedResult) =>
+				selectedResult.stockName === selectedSearch.stockName &&
+				selectedResult.apiUsed === selectedSearch.apiUsed
+		);
+
+		if (possibleIdx >= 0) {
+			selectedSearchResults = [
+				...selectedSearchResults.slice(0, possibleIdx),
+				...selectedSearchResults.slice(possibleIdx + 1)
+			];
+			console.log(selectedSearchResults);
+			return;
+		}
+
+		const sameApiIdx = selectedSearchResults.findIndex(
+			(selectedResult) => selectedResult.apiUsed === selectedSearch.apiUsed
+		);
+		if (sameApiIdx < 0) {
+			selectedSearchResults = [...selectedSearchResults, selectedSearch];
+			console.log(selectedSearchResults);
+			return;
+		}
+
+		selectedSearchResults = [...selectedSearchResults];
+		selectedSearchResults[sameApiIdx] = selectedSearch;
+	}
+
+	function handleTrack() {
+		addStockSearchResult(selectedSearchResults);
+		if (browser) {
+			goto('/stocks/stock/create');
+		}
+	}
 </script>
 
 <div class="p-8">
@@ -53,7 +91,8 @@
 			<div class="flex flex-col">
 				<h1 class="text-4xl font-bold mb-2">Search for Stock</h1>
 				<p class="text-lg">
-					Search for a stock to track. Use the search filter below to search for a stock that is trackable
+					Search for a stock to track. Use the search filter below to search for a stock that is
+					trackable
 				</p>
 			</div>
 		</div>
@@ -69,10 +108,33 @@
 				<p class="text-xl font-bold ml-3">No results found</p>
 			</div>
 		{:else}
-			<div class="flex flex-col gap-4 items-center self-center pt-8 lg:grid lg:grid-cols-2">
-				{#each searchResults as searchResult}
-					<SearchResultCard {searchResult} on:selected={selectResult}/>
-				{/each}
+			<div class="mt-4">
+				<p class="text-lg font-bold">
+					Select the stocks to add for tracking before scrolling to the bottom and clicking 'Track'
+				</p>
+			</div>
+			{#each Object.values(ExternalSearchResponseApiUsed) as apiType}
+				<div class="flex flex-col items-start justify-start mt-4">
+					<h3 class="text-2xl font-bold">API: {apiType.replaceAll('_', ' ')}</h3>
+          <Divider additionalClass="mt-0"/>
+					<div class="flex flex-col gap-4 items-center self-center lg:grid lg:grid-cols-2 mb-4">
+						{#each searchResults.filter((searchResult) => searchResult.apiUsed === apiType) as searchResult}
+							<SearchResultCard
+								{searchResult}
+								on:selected={selectResult}
+								isSelected={selectedSearchResults.find(
+									(selectedResult) =>
+										selectedResult.stockName === searchResult.stockName &&
+										selectedResult.apiUsed === searchResult.apiUsed
+								) !== undefined}
+							/>
+						{/each}
+					</div>
+				</div>
+			{/each}
+
+			<div class="flex items-center justify-center">
+				<button on:click={handleTrack} class="btn btn-primary w-20">Track</button>
 			</div>
 		{/if}
 	</div>

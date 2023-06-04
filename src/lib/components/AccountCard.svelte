@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Account } from '$lib/types/model';
-  import { convertToReadableMonetary } from '$lib/utils/utils';
-  import TextBadge from './TextBadge.svelte';
+	import type { Account } from '$lib/types/model';
+	import { convertToReadableMonetary } from '$lib/utils/utils';
+	import TextBadge from './TextBadge.svelte';
 
 	export let account: Account;
 </script>
@@ -19,10 +19,14 @@
 		</div>
 		<div class="grid justify-items-end content-start">
 			<TextBadge text={account.currency} />
-			<h1 class="card-title pt-3">Groups</h1>
-			{#each account.groups as group}
-				<p>{group}</p>
-			{/each}
+			{#if account.groups.length === 0}
+				<h1 class="card-title pt-3">No Groups</h1>
+			{:else}
+				<h1 class="card-title pt-3">Groups</h1>
+				{#each account.groups as group}
+					<p>{group.name}</p>
+				{/each}
+			{/if}
 		</div>
 	</div>
 </div>

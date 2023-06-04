@@ -8,19 +8,17 @@
 	import GroupCard from './GroupCard.svelte';
 
 	export let data;
-	export let groups: GroupAccount[];
+	let groups: GroupAccount[];
 
 	data.streamed.data.then((response) => {
 		if (response.status === ApiResponseStatus.SUCCESS && response.data !== undefined) {
-			groups = response.data
+			groups = response.data;
 		} else if (response.status === ApiResponseStatus.FAIL && response.errors !== undefined) {
 			addToastFromApiErrors(response.errors);
 		} else {
 			addToast('Internal server error', NotificationType.ERROR);
 		}
 	});
-
-	$: console.log(groups);
 </script>
 
 {#await data.streamed.data}
@@ -40,8 +38,8 @@
 			</div>
 
 			<div class="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl: grid-cols-4 gap-4">
-				{#each groups as group}
-					<GroupCard {group} />
+				{#each groups as group}			
+          <GroupCard {group} />
 				{/each}
 			</div>
 		</div>

@@ -49,16 +49,19 @@
 		}
 	}
 
-	function handleUnit(event) {
-		unit = event.target.value;
+	function handleUnit(event: Event) {
+		const target = event.target as HTMLInputElement | undefined | null;
+		unit = target?.value ?? '0';
 	}
 
-	function handlePrice(event) {
-		price = event.target.value;
+	function handlePrice(event: Event) {
+		const target = event.target as HTMLInputElement | undefined | null;
+		price = target?.value ?? '0';
 	}
 
-	function handleFee(event) {
-		fee = event.target.value;
+	function handleFee(event: Event) {
+		const target = event.target as HTMLInputElement | undefined | null;
+		fee = target?.value ?? '0';
 	}
 
 	$: {
@@ -79,10 +82,10 @@
 		const feeAmt = Number.parseFloat(fee);
 		withFee = (totalAmt + feeAmt).toFixed(5);
 		withoutFee = totalAmt.toFixed(5);
-    if (totalAmt !== 0) {
-      const feeOverTotal = feeAmt / (totalAmt + feeAmt);
-      feeAsPct = (feeOverTotal * 100).toFixed(2);
-    }
+		if (totalAmt !== 0) {
+			const feeOverTotal = feeAmt / (totalAmt + feeAmt);
+			feeAsPct = (feeOverTotal * 100).toFixed(2);
+		}
 	}
 </script>
 

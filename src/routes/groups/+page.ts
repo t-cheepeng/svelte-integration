@@ -25,6 +25,7 @@ export const load = (async (event) => {
 		const groups =
 			groupData.data.groupMappings?.map((groupMapping) => {
 				return {
+          id: groupMapping.id ?? -1,
 					name: groupMapping.name ?? '',
 					currency: groupMapping.currency ?? '',
 					accountsInGroup: groupMapping.accountIdUnderGroup ?? []
@@ -47,10 +48,11 @@ export const load = (async (event) => {
 					accounts.push({
 						id: group.accountsInGroup[i],
 						accountName: accountResJson.data.name,
-						costBasis: 0,
+						costBasis: "0",
 						currentValue: "0",
 						currency: accountResJson.data.currency,
-						groups: []
+						groups: [],
+            accountType: accountResJson.data.accountType
 					});
 				} else if (
 					accountResJson.status === ApiResponseStatus.FAIL &&
@@ -64,6 +66,7 @@ export const load = (async (event) => {
 				}
 			}
 			groupAccounts.push({
+        id: group.id,
 				name: group.name,
 				currency: group.currency,
 				accountsInGroup: accounts

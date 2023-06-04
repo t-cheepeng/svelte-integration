@@ -1,6 +1,7 @@
 import type { EmtpyKnownApiResponse, KnownApiResponse } from '$lib/types/api';
 import type { Api } from '$lib/types/api/ApiRoute';
 import type {
+  AccountActivityPageResponse,
   AccountResponse,
   AccountsResponse,
   ApiResponse,
@@ -74,6 +75,16 @@ export class AccountClient extends Client {
 		this.baseUrl += '/transact';
 		return await this.dispatchRequest(HttpMethod.POST, JSON.stringify(transactionRequest));
 	}
+
+	async getHistory(
+		historyRequestParams: Api.GetAccountHistory.RequestParams,
+		historyRequestQuery: Api.GetAccountHistory.RequestQuery
+	) {
+		this.baseUrl += `/history/${historyRequestParams.accountId}?tradePage=${historyRequestQuery.tradePage}&transactionPage=${historyRequestQuery.transactionPage}`;
+		return (await this.dispatchRequest(
+			HttpMethod.GET
+		)) as KnownApiResponse<AccountActivityPageResponse>;
+	}
 }
 
 export class StockClient extends Client {
@@ -144,6 +155,22 @@ export class GroupClient extends Client {
 		return (await this.dispatchRequest(
 			HttpMethod.POST,
 			JSON.stringify(createGroup)
+		)) as KnownApiResponse<EmtpyKnownApiResponse>;
+	}
+
+	async groupAccount(groupAccount: Api.GroupAccount.RequestBody) {
+		this.baseUrl += '/group';
+		return (await this.dispatchRequest(
+			HttpMethod.POST,
+			JSON.stringify(groupAccount)
+		)) as KnownApiResponse<EmtpyKnownApiResponse>;
+	}
+
+	async ungroupAccount(ungroupAccount: Api.UngroupAccount.RequestBody) {
+		this.baseUrl += '/group';
+		return (await this.dispatchRequest(
+			HttpMethod.DELETE,
+			JSON.stringify(ungroupAccount)
 		)) as KnownApiResponse<EmtpyKnownApiResponse>;
 	}
 }

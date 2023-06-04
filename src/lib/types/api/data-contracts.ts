@@ -52,7 +52,7 @@ export interface CreateStockRequest {
 	displayTickerSymbol: string;
 }
 
-export interface CreateAccountAccountGroupRequest {
+export interface AccountAccountGroupRequest {
 	/** @format int32 */
 	accountId?: number;
 	/** @format int32 */
@@ -164,6 +164,8 @@ export interface StocksResponse {
 }
 
 export interface GroupMappingResponse {
+	/** @format int32 */
+	id?: number;
 	name?: string;
 	currency?: string;
 	accountIdUnderGroup?: number[];
@@ -182,6 +184,32 @@ export interface AccountResponse {
 	name: string;
 	cash?: string;
 	assetValue?: string;
+	costBasis?: string;
+}
+
+export interface AccountActivityPageResponse {
+	hasNextPageForTransaction?: boolean;
+	/** @format int32 */
+	nextPageNumForTransaction?: number;
+	hasNextPageForTrade?: boolean;
+	/** @format int32 */
+	nextPageNumForTrade?: number;
+	accountTransactionsInCurrentPage?: AccountTransactions[];
+	accountTradesInCurrentPage?: TradeResponse[];
+}
+
+export interface AccountTransactions {
+	/** @format int32 */
+	id?: number;
+	/** @format date-time */
+	transactionTs?: string;
+	/** @format int32 */
+	accountIdFrom?: number;
+	/** @format int32 */
+	accountIdTo?: number;
+	amount?: number;
+	transactionType?: AccountTransactionsTransactionType;
+	exchangeRate?: number;
 }
 
 export interface AccountsResponse {
@@ -247,4 +275,10 @@ export enum ExternalSearchResponseApiUsed {
 export enum AccountResponseAccountType {
 	INVESTMENT = 'INVESTMENT',
 	BUDGET = 'BUDGET'
+}
+
+export enum AccountTransactionsTransactionType {
+	DEPOSIT = 'DEPOSIT',
+	WITHDRAW = 'WITHDRAW',
+	TRANSFER = 'TRANSFER'
 }

@@ -1,1 +1,1 @@
-<progress class="progress w-full progress-primary"></progress>
+<progress class="progress w-full progress-primary fixed top-0 z-10"></progress>

@@ -9,23 +9,24 @@
  * ---------------------------------------------------------------
  */
 
-import {
-	AccountResponse,
-	AccountsResponse,
-	AccountTransactionRequest,
-	ApiResponse,
-	CreateAccountAccountGroupRequest,
-	CreateAccountGroupRequest,
-	CreateAccountRequest,
-	CreateStockRequest,
-	GroupMappingsResponse,
-	PatchAccountRequest,
-	PatchStockRequest,
-	SearchResponseData,
-	StockResponse,
-	StocksResponse,
-	TradesResponse,
-	TradeStockRequest
+import type {
+  AccountAccountGroupRequest,
+  AccountActivityPageResponse,
+  AccountResponse,
+  AccountsResponse,
+  AccountTransactionRequest,
+  ApiResponse,
+  CreateAccountGroupRequest,
+  CreateAccountRequest,
+  CreateStockRequest,
+  GroupMappingsResponse,
+  PatchAccountRequest,
+  PatchStockRequest,
+  SearchResponseData,
+  StockResponse,
+  StocksResponse,
+  TradesResponse,
+  TradeStockRequest
 } from './data-contracts';
 
 export namespace Api {
@@ -81,7 +82,26 @@ export namespace Api {
 	export namespace GroupAccount {
 		export type RequestParams = {};
 		export type RequestQuery = {};
-		export type RequestBody = CreateAccountAccountGroupRequest;
+		export type RequestBody = AccountAccountGroupRequest;
+		export type RequestHeaders = {};
+		export type ResponseBody = ApiResponse;
+	}
+
+	/**
+	 * No description
+	 * @tags account-group-controller
+	 * @name UngroupAccount
+	 * @summary Ungroup an account from a group
+	 * @request DELETE:/api/group/group
+	 * @response `200` `ApiResponse` Account is ungrouped successfully
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
+	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
+	 * @response `500` `ApiResponse` Internal server error
+	 */
+	export namespace UngroupAccount {
+		export type RequestParams = {};
+		export type RequestQuery = {};
+		export type RequestBody = AccountAccountGroupRequest;
 		export type RequestHeaders = {};
 		export type ResponseBody = ApiResponse;
 	}
@@ -361,6 +381,37 @@ export namespace Api {
 		export type RequestBody = never;
 		export type RequestHeaders = {};
 		export type ResponseBody = ApiResponse;
+	}
+
+	/**
+	 * No description
+	 * @tags account-controller
+	 * @name GetAccountHistory
+	 * @summary Get account transactions in descending order. Each page will fetch 10 transactions
+	 * @request GET:/api/account/history/{accountId}
+	 * @response `200` `AccountActivityPageResponse` Get account transactions in descending order. Each page will fetch 10 transactions
+	 * @response `400` `ApiResponse` Unable to convert http message to request model
+	 * @response `422` `ApiResponse` Request is understood but entity is not created due to other errors
+	 * @response `500` `ApiResponse` Internal server error
+	 */
+	export namespace GetAccountHistory {
+		export type RequestParams = {
+			/**
+			 * ID of the account to delete
+			 * @format int32
+			 * @example 1
+			 */
+			accountId: number;
+		};
+		export type RequestQuery = {
+			/** @format int32 */
+			tradePage: number;
+			/** @format int32 */
+			transactionPage: number;
+		};
+		export type RequestBody = never;
+		export type RequestHeaders = {};
+		export type ResponseBody = AccountActivityPageResponse;
 	}
 
 	/**

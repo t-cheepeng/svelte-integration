@@ -87,16 +87,19 @@
 		}
 	}
 
-	function handleAmountInput(event) {
-		amtChange = event?.target?.value ?? '0';
+	function handleAmountInput(event: Event) {
+		const target = event.target as HTMLInputElement | undefined | null;
+		amtChange = target?.value ?? '0';
 	}
 
-	function handleExchangeRateInput(event) {
-		exchangeRate = event?.target?.value ?? '0';
+	function handleExchangeRateInput(event: Event) {
+		const target = event.target as HTMLInputElement | undefined | null;
+		exchangeRate = target?.value ?? '0';
 	}
 
-	function handleSelectionChange(event) {
-		selectedAccId = event?.target?.value;
+	function handleSelectionChange(event: Event) {
+		const target = event.target as HTMLSelectElement | undefined | null;
+		selectedAccId = target?.value;
 	}
 </script>
 
